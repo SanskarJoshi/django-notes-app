@@ -25,7 +25,7 @@ pipeline{
                 script
                 {
                     try{
-                        echo "Pushing the code to docker hub"
+                        echo "Pushing the code to docker hub
                         withCredentials([usernamePassword(credentialsId:"dockerHub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
                         sh "docker tag note-app ${env.dockerHubUser}/my-note-app:latest && docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass} && docker push ${env.dockerHubUser}/my-note-app:latest"
                         }
