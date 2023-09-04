@@ -1,4 +1,7 @@
-pipeline{
+try
+{
+    emailText body:   "Test!!!", subject : "Starting Jenkins", to: "sanskarjsh@gmail.com" 
+    pipeline{
     agent any
     stages
     {
@@ -40,3 +43,10 @@ pipeline{
         }
     }
 }
+}
+
+catch(err)
+{
+    emailText body:   "${err}", subject : "Failure", to: "sanskarjsh@gmail.com" 
+}
+
