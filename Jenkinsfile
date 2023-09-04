@@ -27,9 +27,7 @@ pipeline{
                     try{
                         echo "Pushing the code to docker hub"
                         withCredentials([usernamePassword(credentialsId:"dockerHub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
-                        sh "docker tag note-app ${env.dockerHubUser}/my-note-app:latest"
-                        sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                        sh "docker push ${env.dockerHubUser}/my-note-app:latest"
+                        sh "docker tag note-app ${env.dockerHubUser}/my-note-app:latest && docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass} && docker push ${env.dockerHubUser}/my-note-app:latest"
                         }
                      }
                     catch(Exception e)
