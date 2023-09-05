@@ -48,8 +48,13 @@ pipeline{
     post
     {
         success
+        { 
+            emailext attachLog: true, body: 'Email from jenkins test', subject: 'Status - $PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!', to: 'sanskarjsh@gmail.com'
+        }
+        failure
         {
-            emailext body: 'Email from jenkins test', subject: 'Test', to: 'sanskarjsh@gmail.com'
+            emailext attachLog: true, body: 'Email from jenkins test', subject: 'Status - $PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!', to: 'sanskarjsh@gmail.com'
+
         }
     }
 }
