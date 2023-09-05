@@ -45,4 +45,11 @@ pipeline{
             }
         }
     }
+    post
+    {
+        success
+        {
+            emailext body: 'Email from jenkins test', subject: 'Test', to: 'sanskarjsh@gmail.com'
+        }
+    }
 }
