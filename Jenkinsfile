@@ -24,22 +24,13 @@ pipeline{
             {
                 script
                 {
-                    try{
+                
                         echo "Pushing the code to docker hub"
                         withCredentials([usernamePassword(credentialsId:"dockerHub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
                         sh "docker tag note-app ${env.dockerHubUser}/my-note-app:latest && docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass} && docker push ${env.dockerHubUser}/my-note-app:latest"
                         }
-                     }
-                    catch(Exception e)
-                    {
-                        echo " An error occured: ${e.getMessage()}"
-
-                        emailext(
-                            subject: "Pipeline Failure",
-                            body: " An error occur during pipeline execution: ${e.getMessage()}",
-                            to: "sanskarjsh@gmail.com"
-                        )
-                    }
+                     
+                    
                 }
                 
                
