@@ -50,7 +50,7 @@ pipeline
                withKubeConfig([credentialsId: 'jenkins-k8s-integration', serverUrl: 'https://C7E621965D521A1163A51E20C09DCA17.gr7.us-east-1.eks.amazonaws.com']) {
                    sh '''
                         kubectl apply -f k8s
-                        kubectl set image deployment/notes-deployment app=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/note-app:${tagName}${BUILD_NUMBER} -n jenkins
+                        kubectl set image deployment/notes-deployment app=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/note-app:${tagName}${BUILD_NUMBER} -n app-common-ns
 
                    ''' 
                }

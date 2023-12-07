@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: notes-deployment
-  namespace: jenkins
+  namespace: app-common-ns 
 
 spec:
   replicas: 1  
