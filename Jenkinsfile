@@ -16,7 +16,7 @@ pipeline
             {
                 sh '''
                   tagName=`echo $BRANCH_NAME | sed s#/#-#g`
-                  docker build -t ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/note-app-:${tagName}${BUILD_NUMBER} -f Dockerfile .
+                  docker build -t ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/note-app:${tagName}${BUILD_NUMBER} -f Dockerfile .
                 '''
                 echo "Building the image..."
 
