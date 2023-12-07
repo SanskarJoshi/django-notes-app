@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: 410398365640.dkr.ecr.us-east-1.amazonaws.com/notes-app:5
+        image: 410398365640.dkr.ecr.us-east-1.amazonaws.com/note-app:5
         ports:
         - containerPort: 8000
 
