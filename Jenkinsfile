@@ -1,8 +1,8 @@
-pipeline{
+pipeline
+{
     agent any
     stages
     {
-      
        stage("Build")
         {
             steps
@@ -36,15 +36,14 @@ pipeline{
             }
         }
        
-        stage("Build")
+        stage("k8s")
         {
             steps
             {
                withKubeConfig([credentialsId: 'jenkins-k8s-integration', serverUrl: 'https://C7E621965D521A1163A51E20C09DCA17.gr7.us-east-1.eks.amazonaws.com']) {
                    sh '''
-                    pwd && ls -a
-                   '''
-                  
+                    pwd
+                   ''' 
                }
             }
         }
