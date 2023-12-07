@@ -1,6 +1,13 @@
 pipeline
 {
     agent any
+    environment {
+                AWS_ACCOUNT_ID="410398365640"
+                AWS_DEFAULT_REGION="us-east-1"
+    }
+    options {
+        buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '5', numToKeepStr: '5')
+    }
     stages
     {
        stage("Build")
