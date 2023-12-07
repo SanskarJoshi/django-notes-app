@@ -2,59 +2,51 @@ pipeline{
     agent any
     stages
     {
-        stage("Clone Code")
+      
+       stage("Build")
         {
             steps
             {
-                echo "Cloning the code"
-                git url: "https://github.com/SanskarJoshi/django-notes-app.git", branch: "main" 
+                sh '''
+                  tagName=`echo $BRANCH_NAME | sed s#/#-#g`
+                  docker build -t ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/note-app-:${tagName}${BUILD_NUMBER} -f Dockerfile .
+                '''
+                echo "Building the image..."
+
             }
         }
+        stage("Push to AWS ECR")
+        {
+            steps
+            {
+               sh '''
+                    tagName=`echo $BRANCH_NAME | sed s#/#-#g`
+                    docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/note-app:${tagName}${BUILD_NUMBER}
+                '''         
+                echo "Pushing the image to ECR..."
+            }
+        }
+        stage("Delete Local Images") {
+            steps {
+                sh '''
+                    tagName=`echo $BRANCH_NAME | sed s#/#-#g`
+                    docker rmi ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/note-app:${tagName}${BUILD_NUMBER}
+                '''
+                echo "Local images deleted after pushing to ECR."
+            }
+        }
+       
         stage("Build")
         {
             steps
             {
-               echo "Building the image"
-              sh "docker build -t note-app ."
+               withKubeConfig([credentialsId: 'jenkins-k8s-integration', serverUrl: 'https://C7E621965D521A1163A51E20C09DCA17.gr7.us-east-1.eks.amazonaws.com']) {
+                   sh '''
+                    pwd && ls -a
+                   '''
+                  
+               }
             }
-        }
-        stage("Push to Docker Hub")
-        {
-            steps
-            {
-                script
-                {
-                
-                        echo "Pushing the code to docker hub"
-                        withCredentials([usernamePassword(credentialsId:"dockerHub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
-                        sh "docker tag note-app ${env.dockerHubUser}/my-note-app:latest && docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass} && docker push ${env.dockerHubUser}/my-note-app:latest"
-                        }
-                     
-                    
-                }
-                
-               
-            }
-        }
-          stage("Deploy")
-        {
-            steps
-            {
-                echo "Deploying the code"
-                sh "docker-compose down && docker-compose up -d"
-            }
-        }
-    }
-    post
-    {
-        success
-        { 
-            emailext attachLog: true, body: 'Email from jenkins test', subject: 'Status - $PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!', to: 'sanskarjsh@gmail.com'
-        }
-        failure
-        {
-            emailext attachLog: true, body: 'Email from jenkins test', subject: 'Status - $PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!', to: 'sanskarjsh@gmail.com'
-
         }
     }
 }
