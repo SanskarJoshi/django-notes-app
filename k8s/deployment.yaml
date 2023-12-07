@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notes-deployment
+  namespace: jenkins
+
+spec:
+  replicas: 1  
+  selector:
+    matchLabels:
+      app: notes
+  template:
+    metadata:
+      labels:
+        app: notes
+    spec:
+      containers:
+      - name: app
+        image: 410398365640.dkr.ecr.us-east-1.amazonaws.com/notes-app:5
+        ports:
+        - containerPort: 8000
+
+       
+    
